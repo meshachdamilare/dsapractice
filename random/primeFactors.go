@@ -6,10 +6,10 @@ import (
 )
 
 func main() {
-	fmt.Println(FindFactors(6))
+	fmt.Println(FindPrimeFactors(81))
 }
 
-func FindFactors(number int) []int {
+func FindPrimeFactors(number int) []int {
 	var factors []int
 	for number%2 == 0 {
 		factors = append(factors, 2)
@@ -17,12 +17,12 @@ func FindFactors(number int) []int {
 	}
 	i := 3
 
-	max_factor := int(math.Sqrt(float64(number)))
-	for i <= max_factor {
+	maxFactor := int(math.Sqrt(float64(number)))
+	for i <= maxFactor {
 		for number%i == 0 {
 			factors = append(factors, i)
 			number = number / i
-			max_factor = int(math.Sqrt(float64(number)))
+			maxFactor = int(math.Sqrt(float64(number)))
 		}
 		i = i + 2
 	}
