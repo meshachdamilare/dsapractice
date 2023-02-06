@@ -11,7 +11,7 @@ func main() {
 }
 
 /*
-	Solution 1
+	Method 1
 */
 
 func FindPrimeFactors(number int) []int {
@@ -37,7 +37,7 @@ func FindPrimeFactors(number int) []int {
 }
 
 /*
-	Solution 2
+	Method 2
 	This solution only gives the likely prime factors without repetition
 */
 
