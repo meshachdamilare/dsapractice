@@ -1,14 +1,13 @@
-package main
+package containsduplicate
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
 
-func main() {
-	fmt.Println(ContainsDuplicates([]int{1, 2, 3, 4, 4, 5, 6}))
-}
+//func main() {
+//	fmt.Println(ContainsDuplicates([]int{1, 2, 3, 4, 4, 5, 6}))
+//}
 
 // ContainsDuplicates Contains Duplicate
 func ContainsDuplicates(arr []int) bool {
