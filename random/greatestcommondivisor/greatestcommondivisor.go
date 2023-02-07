@@ -1,8 +1,8 @@
-package main
+package greatestcommondivisor
 
 import "fmt"
 
-func main() {
+func check() {
 	fmt.Println(GCD(8, 64))
 	fmt.Println(3 % 4)
 }
