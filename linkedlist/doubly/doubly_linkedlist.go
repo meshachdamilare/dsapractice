@@ -16,10 +16,11 @@ type LinkedList struct {
 
 func main() {
 	l := &LinkedList{}
-	l.append(1)
-	l.append(2)
-	l.append(3)
+
 	l.prepend(4)
+	l.prepend(3)
+	l.prepend(2)
+	l.prepend(1)
 	l.remove(1)
 	l.display()
 }
@@ -47,17 +48,7 @@ func (l *LinkedList) append(value any) {
 }
 
 func (l *LinkedList) prepend(value any) {
-	n := &Node{
-		Value: value,
-	}
-	if l.Length == 0 {
-		l.prepend(value)
-		return
-	}
-	l.Head.Prev = n
-	n.Next = l.Head
-	l.Head = n
-	l.Length++
+
 }
 
 func (l *LinkedList) insert(index int, value any) {
