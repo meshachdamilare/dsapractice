@@ -1,4 +1,4 @@
-package main
+package singly
 
 import (
 	"errors"
@@ -27,9 +27,10 @@ func main() {
 	l.Push(4)
 	l.Push(5)
 	l.Push(6)
+	l.Push(17)
 	l.Push(7)
 	l.Print()
-	fmt.Println("list length:", l.Length)
+	fmt.Println("singly_linkedlist length:", l.Length)
 
 	// Pop, Shift and Unshift example
 	/*	fmt.Println("length: ", l.Length)
@@ -63,7 +64,7 @@ func main() {
 			return
 		}
 		l.Print()
-		fmt.Println("list length:", l.Length)*/
+		fmt.Println("singly_linkedlist length:", l.Length)*/
 
 	// remove example
 	/*	err := l.Remove(3)
@@ -71,7 +72,7 @@ func main() {
 			fmt.Println(err.Error())
 		} else {
 			l.Print()
-			fmt.Println("list length:", l.Length)
+			fmt.Println("singly_linkedlist length:", l.Length)
 		}*/
 
 	// reverse example
@@ -79,7 +80,7 @@ func main() {
 	l.Print()*/
 }
 
-// Push Append to the end of a linked-list
+// Push Append to the end of a linked-singly_linkedlist
 func (l *LinkedList) Push(value int) {
 	node := NewNode(value)
 	if l.Head == nil {
@@ -91,10 +92,10 @@ func (l *LinkedList) Push(value int) {
 	l.Length++
 }
 
-// Pop remove the last element of a list
+// Pop remove the last element of a singly_linkedlist
 func (l *LinkedList) Pop() {
 	if l.Length == 0 {
-		fmt.Println("cant pop from empty list")
+		fmt.Println("cant pop from empty singly_linkedlist")
 		return
 	}
 	if l.Length == 1 {
@@ -117,7 +118,7 @@ func (l *LinkedList) Pop() {
 	return
 }
 
-// Unshift Adds element to beginning of the list
+// Unshift Adds element to beginning of the singly_linkedlist
 func (l *LinkedList) Unshift(value int) {
 	node := NewNode(value)
 	if l.Length == 0 {
@@ -129,7 +130,7 @@ func (l *LinkedList) Unshift(value int) {
 	l.Length++
 }
 
-// Shift Remove the first node of a list
+// Shift Remove the first node of a singly_linkedlist
 func (l *LinkedList) Shift() {
 	if l.Length == 0 {
 		return
@@ -234,7 +235,7 @@ func (l *LinkedList) Reverse() {
 	return
 }
 
-// Print the value in a linked list
+// Print the value in a linked singly_linkedlist
 func (l *LinkedList) Print() {
 	curr := l.Head
 	var list []int
