@@ -1,4 +1,4 @@
-package singly
+package main
 
 import (
 	"errors"
@@ -24,13 +24,33 @@ func NewNode(value int) *Node {
 
 func main() {
 	l := LinkedList{}
+	l.Push(1)
 	l.Push(4)
+	l.Push(3)
+	l.Push(2)
 	l.Push(5)
-	l.Push(6)
-	l.Push(17)
-	l.Push(7)
+	l.Push(2)
+	l.Push(4)
 	l.Print()
-	fmt.Println("singly_linkedlist length:", l.Length)
+
+	// Remove duplicates
+	l.RemoveDuplicates()
+	l.Print()
+	// Partition List
+	/*	l.PartitionList(3)
+		l.Print()*/
+
+	// ReverseBetween
+	/*l.ReverseBetween(0, 5)
+	l.Print()*/
+
+	// FindKthFromEnd
+	/*	n := l.FindKthFromEnd(4)
+		PrintNodeValue(n)*/
+
+	// findMiddleNode example
+	/*n := l.FindMiddleNode()
+	PrintNodeValue(n)*/
 
 	// Pop, Shift and Unshift example
 	/*	fmt.Println("length: ", l.Length)
@@ -64,7 +84,7 @@ func main() {
 			return
 		}
 		l.Print()
-		fmt.Println("singly_linkedlist length:", l.Length)*/
+		fmt.Println("linked-list length:", l.Length)*/
 
 	// remove example
 	/*	err := l.Remove(3)
@@ -72,15 +92,17 @@ func main() {
 			fmt.Println(err.Error())
 		} else {
 			l.Print()
-			fmt.Println("singly_linkedlist length:", l.Length)
+			fmt.Println("linked-list length:", l.Length)
 		}*/
 
 	// reverse example
-	/*l.Reverse()
-	l.Print()*/
+	/*	l.Reverse()
+		l.Print()
+	*/
+
 }
 
-// Push Append to the end of a linked-singly_linkedlist
+// Push Append to the end of a linked-linked-list
 func (l *LinkedList) Push(value int) {
 	node := NewNode(value)
 	if l.Head == nil {
@@ -92,10 +114,10 @@ func (l *LinkedList) Push(value int) {
 	l.Length++
 }
 
-// Pop remove the last element of a singly_linkedlist
+// Pop remove the last element of a linked-list
 func (l *LinkedList) Pop() {
 	if l.Length == 0 {
-		fmt.Println("cant pop from empty singly_linkedlist")
+		fmt.Println("cant pop from empty linked-list")
 		return
 	}
 	if l.Length == 1 {
@@ -118,7 +140,7 @@ func (l *LinkedList) Pop() {
 	return
 }
 
-// Unshift Adds element to beginning of the singly_linkedlist
+// Unshift Adds element to beginning of the linked-list
 func (l *LinkedList) Unshift(value int) {
 	node := NewNode(value)
 	if l.Length == 0 {
@@ -130,7 +152,7 @@ func (l *LinkedList) Unshift(value int) {
 	l.Length++
 }
 
-// Shift Remove the first node of a singly_linkedlist
+// Shift Remove the first node of a linked-list
 func (l *LinkedList) Shift() {
 	if l.Length == 0 {
 		return
@@ -211,31 +233,181 @@ func (l *LinkedList) Remove(idx int) error {
 	return nil
 }
 
+// Reverse reverses a linked list
 func (l *LinkedList) Reverse() {
-	/*
-		Steps involve
-		1. Switch Head and Tail i.e. Tail becomes the Head and Head becomes the Tail
-		2. Declare two variables to track the prev node and next node of the current node
-		3. Swap the nodes
-	*/
-
-	// 1. Switch Head and Tail i.e. Tail becomes the Head and Head becomes the Tail
-	temp := l.Head
-	l.Head = l.Tail
-	l.Tail = temp
-	// 2. Declare two variables to track the prev node and next node of the current node
-	next := temp.Next
-	var prev *Node // tactics to set  prev to nil
-	for i := 0; i < l.Length; i++ {
-		next = temp.Next
-		temp.Next = prev
-		prev = temp
-		temp = next
+	curr := l.Head
+	var prev *Node
+	for curr != nil {
+		temp := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = temp
 	}
+	l.Head = prev
 	return
 }
 
-// Print the value in a linked singly_linkedlist
+/*Implement a member function called findMiddleNode() that finds and returns the middle node of the linked-list.
+Note: this LinkedList implementation does not have a length member variable.
+
+Output:
+Return the middle node of the linked-list.
+If the linked-list has an even number of nodes, return the second middle node (the one closer to the end).
+
+Constraints:
+You are not allowed to use any additional data structures (such as arrays) or modify the existing data structure.
+You can only traverse the linked-list once.*/
+
+// FindMiddleNode to get the middle node assuming the length of the linkedlist is not known
+func (l *LinkedList) FindMiddleNode() *Node {
+	slow := l.Head
+	fast := l.Head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	return slow
+}
+
+/*LL: Find Kth Node From End ( ** Interview Question)
+Implement a member function called findKthFromEnd(k) that finds and returns the kth node from the end of the linked list.
+Note: this LinkedList implementation does not have a length member variable.
+
+Output:
+Return the kth node from the end of the linked list.
+
+If the value of k is greater than or equal to the number of nodes in the list, return null.
+Constraints:
+You are not allowed to use any additional data structures (such as arrays) or modify the existing data structure.
+You can only traverse the linked list once.
+
+Example 1:
+Suppose you have a LinkedList object, list, with the following values:
+1 -> 2 -> 3 -> 4 -> 5
+After calling the findKthFromEnd(2) function:
+let kthNode = list.findKthFromEnd(2);
+The kthNode should have the value 4.
+
+Example 2:
+Now suppose you have a LinkedList object, list, with the following values: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+After calling the findKthFromEnd(4) function:
+let kthNode = list.findKthFromEnd(4);
+The kthNode should have the value 3.
+*/
+
+func (l *LinkedList) FindKthFromEnd(k int) *Node {
+	fast := l.Head
+	slow := l.Head
+
+	for i := 0; i < k; i++ {
+		if fast == nil {
+			return nil
+		}
+		fast = fast.Next
+	}
+	for fast != nil {
+		slow = slow.Next
+		fast = fast.Next
+	}
+	return slow
+}
+
+/*
+LL: Reverse Between ( ** Interview Question)
+Implement a member function called reverseBetween(m, n) that reverses the nodes between indexes (using 0-based indexing)  m and n (inclusive) in the linked list.
+Note: this linked list class does not have a tail which will make this method easier to implement.
+
+Output:
+The function should reverse the nodes between the indexes m and n in the linked list. The reversal should be done in-place.
+
+Constraints:
+You are not allowed to use any additional data structures (such as arrays) or modify the existing data structure.
+You can only traverse the linked list once.
+
+Example 1:
+Suppose you have a LinkedList object, list, with the following values:
+1 -> 2 -> 3 -> 4 -> 5
+
+After calling the reverseBetween(1, 3) function:
+list.reverseBetween(1, 3);
+The linked list should now have the following values:
+1 -> 4 -> 3 -> 2 -> 5
+
+Example 2:
+Now suppose you have a LinkedList object, list, with the following values:
+1 -> 2 -> 3 -> 4 -> 5 -> 6
+
+After calling the reverseBetween(3, 5) function:
+list.reverseBetween(3, 5);
+The linked list should now have the following values:
+1 -> 2 -> 3 -> 6 -> 5 -> 4
+*/
+func (l *LinkedList) ReverseBetween(m, n int) {
+	if l.Head == nil {
+		return
+	}
+	dummy := new(Node)
+	dummy.Next = l.Head
+	prev := dummy
+
+	for i := 0; i < m; i++ {
+		prev = prev.Next
+	}
+	curr := prev.Next
+
+	for i := 0; i < n-m; i++ {
+		temp := curr.Next
+		curr.Next = temp.Next
+		temp.Next = prev.Next
+		prev.Next = temp
+	}
+	l.Head = dummy.Next
+}
+
+func (l *LinkedList) PartitionList(x int) {
+	if l.Head == nil || l.Head.Next == nil {
+		return
+	}
+	beforeHead := new(Node)
+	afterHead := new(Node)
+	before := beforeHead
+	after := afterHead
+	curr := l.Head
+	for curr != nil {
+		if curr.value < x {
+			before.Next = curr
+			before = curr
+		} else {
+			after.Next = curr
+			after = curr
+		}
+		curr = curr.Next
+	}
+
+	after.Next = nil
+	before.Next = afterHead.Next
+
+	l.Head = beforeHead.Next
+
+	return
+}
+
+func (l *LinkedList) RemoveDuplicates() {
+	uniqueMap := make(map[int]bool)
+	prev := new(Node)
+	curr := l.Head
+	for curr != nil {
+		if _, found := uniqueMap[curr.value]; found {
+			prev.Next = curr.Next
+		} else {
+			uniqueMap[curr.value] = true
+			prev = curr
+		}
+		curr = curr.Next
+	}
+}
+
+// Print the value in a linked singly_linked-list
 func (l *LinkedList) Print() {
 	curr := l.Head
 	var list []int
