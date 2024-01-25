@@ -28,23 +28,11 @@ func main() {
 	l.Push(1)
 	l.Push(2)
 	l.Push(3)
-	l.Push(4)
-	l.Push(5)
-	l.Push(6)
+	l.Push(2)
+	l.Push(1)
+
 	l.Print()
-	fmt.Println("list length:", l.Length)
-
-	// ReverseBetween
-	/*l.ReverseBetween(0, 5)
-	l.Print()*/
-
-	// FindKthFromEnd
-	/*	n := l.FindKthFromEnd(4)
-		PrintNodeValue(n)*/
-
-	// findMiddleNode example
-	/*n := l.FindMiddleNode()
-	PrintNodeValue(n)*/
+	fmt.Println("length: ", l.Length)
 
 	// Pop, Shift and Unshift example
 	/*	fmt.Println("length: ", l.Length)
@@ -59,7 +47,7 @@ func main() {
 		fmt.Println("length: ", l.Length)*/
 
 	// GetNodeValueByIndex example
-	/*	n, err := l.GetNodeValueByIndex(2)
+	/*	n, err := l.GetNodeValueByIndex(3)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
@@ -83,17 +71,28 @@ func main() {
 		}*/
 
 	// remove example
-	err := l.Remove(3)
-	if err != nil {
-		fmt.Println(err.Error())
-	} else {
-		l.Print()
-		fmt.Println("linked-list length:", l.Length)
-	}
+	/*	err := l.Remove(3)
+		if err != nil {
+			fmt.Println(err.Error())
+		} else {
+			l.Print()
+			fmt.Println("linked-list length:", l.Length)
+		}*/
 
-	// reverse example
-	/*l.Reverse()
+	// Reverse
+	/*	l.Reverse()
+		l.Print()*/
+
+	// SwapFirst
+	/*l.SwapFirstLast()
 	l.Print()*/
+
+	// IsPalindrome checker
+	//fmt.Println(l.IsPalindrome())
+
+	l.SwapPairs()
+	l.Print()
+
 }
 
 func (l *DoublyLinkedList) Push(value int) {
@@ -227,6 +226,62 @@ func (l *DoublyLinkedList) Remove(idx int) error {
 	temp.Prev = nil
 	temp.Next = nil
 	return nil
+}
+
+func (l *DoublyLinkedList) SwapFirstLast() {
+	if l.Length < 2 {
+		return
+	}
+	temp := l.Head.Value
+	l.Head.Value = l.Tail.Value
+	l.Tail.Value = temp
+
+}
+
+func (l *DoublyLinkedList) Reverse() {
+	curr := l.Head
+	var temp *Node
+	for curr != nil {
+		temp = curr.Prev
+		curr.Prev = curr.Next
+		curr.Next = temp
+		curr = curr.Prev
+	}
+	temp = l.Head
+	l.Head = l.Tail
+	l.Tail = temp
+}
+
+func (l *DoublyLinkedList) IsPalindrome() bool {
+	if l.Length <= 1 {
+		return true
+	}
+
+	fNode := l.Head
+	bNode := l.Tail
+
+	for i := 0; i <= l.Length/2; i++ {
+		if fNode.Value != bNode.Value {
+			return false
+		}
+		fNode = fNode.Next
+		bNode = bNode.Prev
+	}
+	return true
+}
+
+func (l *DoublyLinkedList) SwapPairs() {
+	if l.Length <= 0 {
+		return
+	}
+	first := l.Head
+	for first != nil && first.Next != nil {
+		temp := first.Value
+		first.Value = first.Next.Value
+		first.Next.Value = temp
+		first = first.Next.Next
+	}
+
 }
 
 // Print the value in a linked singly_linked-list
