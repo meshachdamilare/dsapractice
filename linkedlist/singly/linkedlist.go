@@ -34,8 +34,9 @@ func main() {
 	l.Print()
 
 	// Remove duplicates
-	l.RemoveDuplicates()
-	l.Print()
+	// l.RemoveDuplicates()
+	// l.Print()
+
 	// Partition List
 	/*	l.PartitionList(3)
 		l.Print()*/
@@ -64,13 +65,16 @@ func main() {
 		l.Print()
 		fmt.Println("length: ", l.Length)*/
 
-	// GetNodeValueByIndex example
-	/*	n, err := l.GetNodeValueByIndex(3)
+	// GetNodeByIndex example
+
+	/*
+		n, err := l.GetNodeByIndex(3)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
 			PrintNodeValue(n)
-		}*/
+		}
+	*/
 
 	// SetNodeValueByIndex example
 	/*	err := l.SetNodeValueByIndex(33, 2)
@@ -79,21 +83,23 @@ func main() {
 		}*/
 
 	// insert example
-	/*	err := l.Insert(22, 2)
+	/*
+		err := l.InsertB(22, 2)
 		if err != nil {
 			return
 		}
 		l.Print()
-		fmt.Println("linked-list length:", l.Length)*/
+		fmt.Println("linked-list length:", l.Length)
+	*/
 
 	// remove example
-	/*	err := l.Remove(3)
-		if err != nil {
-			fmt.Println(err.Error())
-		} else {
-			l.Print()
-			fmt.Println("linked-list length:", l.Length)
-		}*/
+	err := l.RemoveB(3)
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		l.Print()
+		fmt.Println("linked-list length:", l.Length)
+	}
 
 	// reverse example
 	/*	l.Reverse()
@@ -137,7 +143,6 @@ func (l *LinkedList) Pop() {
 	pre.Next = nil
 	l.Tail = pre
 	l.Length--
-	return
 }
 
 // Unshift Adds element to beginning of the linked-list
@@ -167,21 +172,27 @@ func (l *LinkedList) Shift() {
 	l.Length--
 }
 
-// GetNodeValueByIndex Get the node value at a given index
-func (l *LinkedList) GetNodeValueByIndex(idx int) (*Node, error) {
+// GetNodeByIndex Get the node value at a given index
+func (l *LinkedList) GetNodeByIndex(idx int) (*Node, error) {
 	if idx < 0 || idx > l.Length {
 		return nil, errors.New("index out of range")
 	}
-	temp := l.Head
-	for i := 0; i < idx; i++ {
-		temp = temp.Next
+	curr := l.Head
+	count := 0
+	for curr != nil {
+		if count == idx-1 {
+			return curr, nil
+		}
+		count++
+		curr = curr.Next
 	}
-	return temp, nil
+	return nil, errors.New("error occured")
+
 }
 
 // SetNodeValueByIndex change the node value at the given index
 func (l *LinkedList) SetNodeValueByIndex(value int, idx int) error {
-	temp, err := l.GetNodeValueByIndex(idx)
+	temp, err := l.GetNodeByIndex(idx)
 	if err != nil {
 		return err
 	}
@@ -204,11 +215,49 @@ func (l *LinkedList) Insert(value int, idx int) error {
 	}
 	newNode := NewNode(value)
 	// gets the node at the index before the given index
-	temp, _ := l.GetNodeValueByIndex(idx - 1)
+	temp, _ := l.GetNodeByIndex(idx - 1)
 	newNode.Next = temp.Next
 	temp.Next = newNode
 	l.Length++
 	return nil
+}
+
+// Pure Insert function without using the previous func GetNodeByIndex
+func (l *LinkedList) InsertB(value int, idx int) error {
+	if idx == 0 {
+		l.Unshift(value)
+		return nil
+	}
+	if idx == l.Length {
+		l.Push(value)
+		return nil
+	}
+	if idx < 0 || idx > l.Length {
+		return errors.New("insert error: Index out of range")
+	}
+
+	newNode := NewNode(value)
+
+	curr := l.Head
+	prev := l.Head
+
+	count := 0
+
+	for curr != nil {
+
+		if count == idx-1 {
+			prev.Next = newNode
+			newNode.Next = curr
+			l.Length++
+			return nil
+		}
+		temp := curr.Next
+		prev = curr
+		curr = temp
+		count++
+	}
+	return errors.New("errors occured")
+
 }
 
 // Remove removes node value at the given index
@@ -225,12 +274,48 @@ func (l *LinkedList) Remove(idx int) error {
 		return nil
 	}
 	// gets the node at the index before the given index
-	before, _ := l.GetNodeValueByIndex(idx - 1)
+	before, _ := l.GetNodeByIndex(idx - 1)
 	temp := before.Next
 	before.Next = temp.Next
 	temp.Next = nil
 	l.Length--
 	return nil
+}
+
+// Pure remove function without using the previous func GetNodeByIndex
+func (l *LinkedList) RemoveB(idx int) error {
+	if idx < 0 || idx >= l.Length {
+		return errors.New("index out of range")
+	}
+	if idx == 0 {
+		l.Shift()
+		return nil
+	}
+	if idx == l.Length-1 {
+		l.Pop()
+		return nil
+	}
+
+	curr := l.Head
+	prev := l.Head
+
+	count := 0
+
+	for curr != nil {
+
+		if count == idx-1 {
+			prev.Next = curr.Next
+			curr.Next = nil
+			l.Length--
+			return nil
+		}
+		temp := curr.Next
+		prev = curr
+		curr = temp
+		count++
+	}
+	return errors.New("errors occured")
+
 }
 
 // Reverse reverses a linked list
