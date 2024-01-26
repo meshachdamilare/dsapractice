@@ -43,6 +43,13 @@ func (s *Stack[T]) pop() (T, bool) {
 	return res, true
 }
 
+func (s *Stack[T]) isEmpty() bool {
+	if len(s.StackList) > 0 {
+		return false
+	}
+	return true
+}
+
 func (s *Stack[T]) reverseString(word string) string {
 	ns := new(Stack[rune])
 	for _, v := range word {
@@ -85,6 +92,27 @@ func (s *Stack[T]) isBalanceddParenthesis(p string) bool {
 	}
 }
 
+func sortStack[T int](s *Stack[T]) {
+	additionalStack := new(Stack[T])
+	for !s.isEmpty() {
+		temp, _ := s.pop()
+
+		for !additionalStack.isEmpty() {
+			top, _ := additionalStack.pop()
+			if top > temp {
+				s.push(top)
+			}
+		}
+		additionalStack.push(temp)
+
+	}
+	for !additionalStack.isEmpty() {
+		top, _ := additionalStack.pop()
+		s.push(top)
+	}
+
+}
+
 func main() {
 	var s Stack[string]
 	s.push("h")
@@ -94,7 +122,7 @@ func main() {
 	s.push("o")
 	s.print()
 	fmt.Println("Stack length: ", s.length())
-
+	fmt.Println("Is empty: ", s.isEmpty())
 	// Pop stack
 	s.pop()
 	s.pop()
@@ -103,6 +131,8 @@ func main() {
 	s.pop()
 	s.print()
 	fmt.Println("Stack length: ", s.length())
+
+	// fmt.Println("Is empty: ", s.isEmpty())
 
 	// Reverse string through stack
 	res := s.reverseString("Psalm")
