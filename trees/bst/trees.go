@@ -128,11 +128,60 @@ func InOrder[T int | float32](node *Node[T], res []T) []T {
 	return res
 }
 
+func NonRecursiveInOrder[T int | float32](node *Node[T]) []T {
+	var res []T
+	//create a stack as we need to remeber the previous node visited
+	stack := list.New()
+
+	if node == nil {
+		return res
+	}
+	temp := node
+	for {
+		for temp != nil {
+			stack.PushBack(temp)
+			temp = temp.Left
+		}
+		if stack.Len() <= 0 {
+			break
+		}
+		temp = stack.Remove(stack.Back()).(*Node[T])
+		res = append(res, temp.Value)
+		temp = temp.Right
+	}
+	return res
+
+}
+
 func PreOrder[T int | float32](node *Node[T], res []T) []T {
 	if node != nil {
 		res = append(res, node.Value)
 		res = PreOrder[T](node.Left, res)
 		res = PreOrder[T](node.Right, res)
+	}
+	return res
+}
+
+func NonRecursivePreOrder[T int | float32](node *Node[T]) []T {
+	var res []T
+	//create a stack as we need to remeber the previous node visited
+	stack := list.New()
+
+	if node == nil {
+		return res
+	}
+	temp := node
+	for {
+		for temp != nil {
+			res = append(res, temp.Value)
+			stack.PushBack(temp)
+			temp = temp.Left
+		}
+		if stack.Len() <= 0 {
+			break
+		}
+		temp = stack.Remove(stack.Back()).(*Node[T])
+		temp = temp.Right
 	}
 	return res
 }
@@ -146,21 +195,27 @@ func PostOrder[T int | float32](node *Node[T], res []T) []T {
 	return res
 }
 
+// Todo Implement this
+
+// func NonRecursivePostOrder[T int | float32](node *Node[T]) []T {
+
+// }
+
 func (bt *BST[T]) printBSF() {
 	result := BreadthFirstSearch[T](bt.Root)
-	fmt.Println(result)
+	fmt.Println("BSF: ", result)
 }
 func (bt *BST[T]) printInOrder() {
 	result := InOrder[T](bt.Root, []T{})
-	fmt.Println(result)
+	fmt.Println("InOrder DFS: ", result)
 }
 func (bt *BST[T]) printPreOrder() {
 	result := PreOrder[T](bt.Root, []T{})
-	fmt.Println(result)
+	fmt.Println("PreOrder DFS: ", result)
 }
 func (bt *BST[T]) printPostOrder() {
 	result := PostOrder[T](bt.Root, []T{})
-	fmt.Println(result)
+	fmt.Println("PostOrder DFS: ", result)
 }
 
 func main() {
@@ -185,6 +240,12 @@ func main() {
 	bt2.printInOrder()
 	bt2.printPreOrder()
 	bt2.printPostOrder()
+
+	res := NonRecursiveInOrder[int](bt2.Root)
+	fmt.Println("NonRecursiveInOrder: ", res)
+
+	res2 := NonRecursivePreOrder[int](bt2.Root)
+	fmt.Println("NonRecursivePreOrder: ", res2)
 
 	//CHECK if a tree contains a given value
 	// out := bst.contains(30)
