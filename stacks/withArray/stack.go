@@ -21,17 +21,17 @@ func (s *Stack[T]) length() int {
 }
 
 // Check if the stack is empty or nnot
-// func (s *Stack[T]) isEmpty() bool {
-// 	if len(s.StackList) == 0 {
-// 		return true
-// 	}
-// 	return false
-// }
+func (s *Stack[T]) isEmpty() bool {
+	return len(s.StackList) == 0
+}
 
+// Push into stack
 func (s *Stack[T]) push(val T) {
 	s.StackList = append(s.StackList, val)
 }
 
+// Remove the top of a stack, true and false if the top is empty
+// It modifies th stack
 func (s *Stack[T]) pop() (T, bool) {
 	var res T
 	l := s.length()
@@ -43,11 +43,15 @@ func (s *Stack[T]) pop() (T, bool) {
 	return res, true
 }
 
-func (s *Stack[T]) isEmpty() bool {
-	if len(s.StackList) > 0 {
-		return false
+// Check out the top of a stack, true and false if the top is empty
+// It does not modify the stack
+func (s *Stack[T]) peek() (T, bool) {
+	var res T
+	l := s.length()
+	if l == 0 {
+		return res, false
 	}
-	return true
+	return s.StackList[l-1], true
 }
 
 func (s *Stack[T]) reverseString(word string) string {
@@ -56,7 +60,7 @@ func (s *Stack[T]) reverseString(word string) string {
 		ns.push(v)
 	}
 	var reversedName string
-	for len(ns.StackList) > 0 {
+	for !ns.isEmpty() {
 		if ch, ok := ns.pop(); ok {
 			reversedName += string(ch)
 		}
@@ -101,16 +105,17 @@ func sortStack[T int](s *Stack[T]) {
 			top, _ := additionalStack.pop()
 			if top > temp {
 				s.push(top)
+			} else {
+				additionalStack.push(top)
+				break
 			}
 		}
 		additionalStack.push(temp)
-
 	}
 	for !additionalStack.isEmpty() {
 		top, _ := additionalStack.pop()
 		s.push(top)
 	}
-
 }
 
 func main() {
@@ -140,5 +145,19 @@ func main() {
 
 	res2 := s.isBalanceddParenthesis("(()())")
 	fmt.Println(res2)
+
+	var s2 Stack[int]
+
+	s2.push(2)
+	s2.push(1)
+	s2.push(5)
+	s2.push(3)
+	s2.push(4)
+
+	s2.print()
+
+	sortStack[int](&s2)
+	s2.print()
+	fmt.Println(s2.length())
 
 }
